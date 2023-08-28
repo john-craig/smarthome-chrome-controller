@@ -8,9 +8,10 @@ def find_or_start_chromium():
     for proc in psutil.process_iter(attrs=['pid', 'name', 'cmdline']):
         try:
             cmdline = ' '.join(proc.info['cmdline'])
-            if 'chromium' in proc.info['name'].lower() and target_args in cmdline:
+            if ('chromium' in proc.info['name'].lower() or 'chrome' in proc.info['name'].lower()) \
+            and target_args in cmdline:
                 return proc.info['pid']
-            elif 'chromium' in proc.info['name'].lower():
+            elif ('chromium' in proc.info['name'].lower() or 'chrome' in proc.info['name'].lower()):
                 proc.terminate()
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass
@@ -23,7 +24,8 @@ def find_or_start_chromium():
     for proc in psutil.process_iter(attrs=['pid', 'name', 'cmdline']):
         try:
             cmdline = ' '.join(proc.info['cmdline'])
-            if 'chromium' in proc.info['name'].lower() and target_args in cmdline:
+            if ('chromium' in proc.info['name'].lower() or 'chrome' in proc.info['name'].lower()) \
+            and target_args in cmdline:
                 return proc.info['pid']
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass

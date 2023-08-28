@@ -4,6 +4,8 @@ from utils.controller import Controller
 chromium_pid = find_or_start_chromium()
 chrome_controller = Controller(chromium_pid)
 
+print(chromium_pid)
+
 yt_music_prefix = "https://music.youtube.com"
 yt_music_playlist_url = "https://music.youtube.com/watch?v=4Hg1Kudd_x4&list=PLGELcwbcacxdHoxytHajHYMVbFrcg9HfR"
 
