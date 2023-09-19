@@ -1,6 +1,9 @@
 import argparse, re
 from utils.process import find_or_start_chromium
 from utils.controller import Controller
+import yaml
+
+DEFAULT_PROFILES_PATH="./profiles.yaml"
 
 def extract_url_parts(url):
     # Define a regular expression pattern to match URLs
@@ -42,25 +45,49 @@ def close_url(url, chrome_controller):
     
     return url_tab_id
 
+
+def conform_tabs(profile, chrome_controller):
+    inital_tabs = chrome_controller.get_all_tabs()
+
+    if 'tabs' in first_profile:
+        tabs = first_profile['tabs']
+        for tab in tabs:
+            if 'url' in tab:
+                url = tab['url']
+                chrome_controller.open_tab(url)
+    
+    for old_tab in inital_tabs:
+        chrome_controller.close_tab(old_tab['targetId'])
+
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('action', choices=['open', 'close'])
-    parser.add_argument('--url', action='store')
+    parser.add_argument('--profiles', action='store')
 
     args = parser.parse_args()
-    
-    url = args.url
-    action = args.action
+    profiles_path = args.profiles
 
+    if not profiles_path:
+        profiles_path = DEFAULT_PROFILES_PATH
+
+    # New configuration input
+    with open(profiles_path, 'r') as yaml_file:
+        yaml_content = yaml_file.read()
+
+    profiles_conf = yaml.safe_load(yaml_content)
+
+    # Get a running chrome instance
     chromium_pid = find_or_start_chromium()
     chrome_controller = Controller(chromium_pid)
 
-    if (action == 'open'):
-        res = open_url(url, chrome_controller)
-    elif (action == 'close'):
-        res = close_url(url, chrome_controller)
-    
-    print(res)
+    # Iterate through the 'tabs' list of the first profile and open tabs
+    if 'profiles' in profiles_conf:
+        profiles = profiles_conf['profiles']
+        if profiles:
+            first_profile = profiles[0]
+            conform_tabs(first_profile, chrome_controller)
+            
 
 # https://music.youtube.com/watch?v=4Hg1Kudd_x4&list=PLGELcwbcacxdHoxytHajHYMVbFrcg9HfR

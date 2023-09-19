@@ -29,4 +29,13 @@ class Controller:
     def close_tab(self, tab_id):
         ret_val, messages = self.chrome.Target.closeTarget(targetId=tab_id)
 
-        return ret_val['result']
+        if ret_val:
+            return ret_val['result']
+
+    ####
+
+    def get_all_tabs(self):
+        ret_val, messages = self.chrome.Target.getTargets()
+        tab_info = ret_val['result']['targetInfos']
+
+        return tab_info
