@@ -2,6 +2,7 @@ import argparse, re
 from utils.process import find_or_start_chromium
 from utils.controller import Controller
 import yaml
+import time
 
 DEFAULT_PROFILES_PATH="./profiles.yaml"
 
@@ -55,6 +56,8 @@ def conform_tabs(profile, chrome_controller):
             if 'url' in tab:
                 url = tab['url']
                 chrome_controller.open_tab(url)
+                time.sleep(10)
+
     
     for old_tab in inital_tabs:
         chrome_controller.close_tab(old_tab['targetId'])
