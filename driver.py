@@ -1,6 +1,8 @@
 import argparse, re
+import os
 from utils.process import find_or_start_chromium
 from utils.controller import Controller
+from utils.logger import Logger
 import yaml
 import time
 
@@ -36,7 +38,6 @@ def open_url(url, chrome_controller):
     
     return url_tab_id
 
-
 def close_url(url, chrome_controller):
     url_prefix = extract_url_parts(url)
     url_tab_id = chrome_controller.get_tab_id(url=url_prefix)
@@ -65,6 +66,12 @@ def conform_tabs(profile, chrome_controller):
 
 
 if __name__ == "__main__":
+    # Set up the logger
+    home_directory = os.path.expanduser("~")
+    log_file_path = os.path.join(home_directory, ".config", "controller.log")
+    logger = Logger(log_file_path)
+
+    # Set up the arguement parser
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--profiles', action='store')
