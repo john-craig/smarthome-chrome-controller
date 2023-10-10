@@ -21,7 +21,7 @@ def find_or_start_chromium(logger=None):
             pass
     
     if logger:
-        logger.log_event("Starting new Chromium process with correct arguments."))
+        logger.log_event("Starting new Chromium process with correct arguments.")
     subprocess.Popen(["chromium", "--remote-debugging-port=9222", "--remote-allow-origins=*"])
     
     # Wait for a short while to ensure the process has started
@@ -33,12 +33,12 @@ def find_or_start_chromium(logger=None):
             if ('chromium' in proc.info['name'].lower() or 'chrome' in proc.info['name'].lower()) \
             and target_args in cmdline:
                 if logger:
-                    logger.log_event("PID of new Chromium process is {}".format(proc.info['pid'])))
+                    logger.log_event("PID of new Chromium process is {}".format(proc.info['pid']))
                 return proc.info['pid']
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass
     
     if logger:
-        logger.log_event("Unable to find PID of new Chrome process"))
+        logger.log_event("Unable to find PID of new Chrome process")
 
     return None
