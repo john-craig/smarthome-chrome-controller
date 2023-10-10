@@ -89,8 +89,8 @@ if __name__ == "__main__":
     profiles_conf = yaml.safe_load(yaml_content)
 
     # Get a running chrome instance
-    chromium_pid = find_or_start_chromium()
-    chrome_controller = Controller(chromium_pid)
+    chromium_pid = find_or_start_chromium(logger=logger)
+    chrome_controller = Controller(chromium_pid, logger=logger)
 
     # Iterate through the 'tabs' list of the first profile and open tabs
     if 'profiles' in profiles_conf:

@@ -2,9 +2,10 @@ import PyChromeDevTools
 
 
 class Controller:
-    def __init__(self, chrome_pid):
+    def __init__(self, chrome_pid, logger=None):
         self.chrome_pid = chrome_pid
         self.chrome = PyChromeDevTools.ChromeInterface()
+        self.logger = logger
 
 
     def get_tab_id(self, url=""):
