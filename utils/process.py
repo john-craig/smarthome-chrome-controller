@@ -22,7 +22,11 @@ def find_or_start_chromium(logger=None):
     
     if logger:
         logger.log_event("Starting new Chromium process with correct arguments.")
-    subprocess.Popen(["chromium", "--remote-debugging-port=9222", "--remote-allow-origins=*"])
+    pipe = subprocess.Popen(["chromium", "--remote-debugging-port=9222", "--remote-allow-origins=*"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmd_output = pipe.communicate()[0]
+
+    if logger:
+        logger.log_event("Result of new process was {}".format(cmd_output))
     
     # Wait for a short while to ensure the process has started
     time.sleep(2)
