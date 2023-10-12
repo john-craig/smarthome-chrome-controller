@@ -40,7 +40,7 @@ def find_or_start_chromium(logger):
     chromium_pid = None
     max_retries = 100
     cur_retries = 0
-    while chromium_pid = None and cur_retries < max_retries:
+    while chromium_pid == None and cur_retries < max_retries:
         time.sleep(5)
         
         for proc in psutil.process_iter(attrs=['pid', 'name', 'cmdline']):
