@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chrome_ctrl_server"
+version = "0.0.1"
+authors = [
+    { name = "John Craig", email="john.e.craig.jr@protonmail.com"}
+]
+description = "Home Lab Configuration Manager"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "click>=8.1.7",
+    "ruamel.yaml>=0.18.6",
+    "ruamel.yaml.clib>=0.2.8",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+hlcfg-man = 'hlcfg_man:hlcfg_man_cli'

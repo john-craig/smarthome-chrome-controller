@@ -13,7 +13,7 @@ def find_or_start_chromium(logger):
                 logger.log_event("Found running Chromium process that meets criteria, PID: {}, Commandline string: '{}'".format(proc.info['pid'], cmdline))
                 return proc.info['pid']
             elif ('chromium' in proc.info['name'].lower() or 'chrome' in proc.info['name'].lower()):
-                ogger.log_event("Found running Chromium process that does not meet criteria with PID: {}, Commandline string: '{}'; killing it".format(proc.info['pid'], cmdline))
+                logger.log_event("Found running Chromium process that does not meet criteria with PID: {}, Commandline string: '{}'; killing it".format(proc.info['pid'], cmdline))
                 proc.terminate()
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass
