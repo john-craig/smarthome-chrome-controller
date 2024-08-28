@@ -1,6 +1,5 @@
 import click, re
 import os
-import yaml
 import time
 from chromectrl.utils.process import find_or_start_chromium
 from chromectrl.utils.controller import Controller
@@ -27,16 +26,6 @@ def extract_url_parts(url):
     else:
         return "Invalid URL"
 
-def open_url(url, chrome_controller):
-    url_prefix = extract_url_parts(url)
-    url_tab_id = chrome_controller.get_tab_id(url=url_prefix)
-
-    if not url_tab_id:
-        url_tab_id = chrome_controller.open_tab(url)
-    else:  
-        chrome_controller.set_tab_url(url_tab_id, url)
-    
-    return url_tab_id
 
 def close_url(url, chrome_controller):
     url_prefix = extract_url_parts(url)
@@ -55,6 +44,15 @@ def chromectrl_cli(ctx):
         'controller': Controller()
     }
 
+@chromectrl_cli.command(help="Open a tab with the specified URL")
+@click.option('-j', '--jsonify', is_flag=True, show_default=True, default=False, help="Display the result as JSON")
+@click.pass_context
+@click.argument('url')
+def open_tab(ctx, jsonify, url):
+    controller = ctx.obj['controller']
+
+    controller.open_tab(url)
+
 @chromectrl_cli.command(help="Get a list of the current tabs")
 @click.option('-j', '--jsonify', is_flag=True, show_default=True, default=False, help="Display the result as JSON")
 @click.pass_context
@@ -68,6 +66,25 @@ def get_tabs(ctx, jsonify):
             click.echo(tab['url'])
     else:
         click.echo(cur_tabs)
+
+@chromectrl_cli.command(help="Close a tab with the specified URL")
+@click.option('-j', '--jsonify', is_flag=True, show_default=True, default=False, help="Display the result as JSON")
+@click.pass_context
+@click.argument('url')
+def close_tab(ctx, jsonify, url):
+    controller = ctx.obj['controller']
+
+    cur_tabs = controller.get_all_tabs()
+
+    for tab in cur_tabs:
+        if tab['url'] == url:
+            controller.close_tab(tab['targetId'])
+
+            if jsonify:
+                click.echo(tab)
+            else:
+                click.echo(tab['url'])
+            break
 
 @chromectrl_cli.command(help="Set the current tabs")
 @click.option('-j', '--jsonify', is_flag=True, show_default=True, default=False, help="Display the result as JSON")
@@ -136,7 +153,20 @@ def focus_tab(ctx, jsonify, url):
                 click.echo(tab['url'])
             break
 
+@chromectrl_cli.command(help="Send keystroke(s) to the page")
+@click.pass_context
+@click.argument("keys")
+def send_keystroke(ctx, keys):
+    controller = ctx.obj['controller']
 
+    controller.send_keystroke(keys)
+
+@chromectrl_cli.command(help="Exit full screen")
+@click.pass_context
+def exit_fullscreen(ctx):
+    controller = ctx.obj['controller']
+
+    rv = controller.evaluate_expression('if (document.exitFullscreen) document.exitFullscreen();')
 
 if __name__ == '__main__':
     chromectrl_cli()

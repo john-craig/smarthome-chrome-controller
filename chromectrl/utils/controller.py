@@ -79,3 +79,21 @@ class Controller:
         tab_info = list(reversed(ret_val['result']['targetInfos']))
 
         return tab_info
+    
+    def send_keystroke(self, keystroke):
+        try:
+            ret_val, messages = self.chrome.Input.dispatchKeyEvent(type='rawKeyDown', text=keystroke)
+        except WebSocketConnectionClosedException as e:
+            self.chrome = PyChromeDevTools.ChromeInterface(port=self.port)
+            return self.send_keystroke(keystroke)
+        
+        return ret_val
+
+    def evaluate_expression(self, expression):
+        try:
+            ret_val, messages  = self.chrome.Runtime.evaluate(expression=expression)
+        except WebSocketConnectionClosedException as e:
+            self.chrome = PyChromeDevTools.ChromeInterface(port=self.port)
+            return self.evaluate_expression(expression)
+        
+        return ret_val
