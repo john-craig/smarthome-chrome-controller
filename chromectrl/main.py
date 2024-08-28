@@ -1,11 +1,7 @@
 import click, re
 import os
 import time
-from chromectrl.utils.process import find_or_start_chromium
 from chromectrl.utils.controller import Controller
-from chromectrl.utils.logger import Logger
-
-DEFAULT_PROFILES_PATH="./profiles.yaml"
 
 def extract_url_parts(url):
     # Define a regular expression pattern to match URLs
