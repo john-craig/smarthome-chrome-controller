@@ -1,5 +1,0 @@
-profiles:
-  - name: "Optional Profile Name"
-    tabs:
-      - url: https://music.youtube.com
-      - url: https://google.com

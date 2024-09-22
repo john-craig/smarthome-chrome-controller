@@ -91,7 +91,7 @@ class Controller:
 
     def evaluate_expression(self, expression):
         try:
-            ret_val, messages  = self.chrome.Runtime.evaluate(expression=expression)
+            ret_val, messages = self.chrome.Runtime.evaluate(expression=expression)
         except WebSocketConnectionClosedException as e:
             self.chrome = PyChromeDevTools.ChromeInterface(port=self.port)
             return self.evaluate_expression(expression)

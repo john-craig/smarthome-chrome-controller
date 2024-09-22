@@ -157,6 +157,64 @@ def send_keystroke(ctx, keys):
 
     controller.send_keystroke(keys)
 
+###################################################################
+# For interacting with videos
+###################################################################
+
+@chromectrl_cli.command(help="Check if a video is playing")
+@click.pass_context
+def is_video_playing(ctx):
+    controller = ctx.obj['controller']
+
+    expression = '''
+        Array.from(document.querySelectorAll('video')).some(video => !video.paused && !video.ended);
+    '''
+
+    rv = controller.evaluate_expression(expression)
+
+    if 'result' in rv and 'result' in rv['result']:
+        print(str(rv['result']['result']['value']))
+    else:
+        print(str(False))
+
+@chromectrl_cli.command(help="Play a video on the screen")
+@click.pass_context
+def play_video(ctx):
+    controller = ctx.obj['controller']
+
+    expression = '''
+        document.querySelectorAll('video').forEach(video => video.play());
+    '''
+
+    rv = controller.evaluate_expression(expression)
+
+@chromectrl_cli.command(help="Pause a video on the screen")
+@click.pass_context
+def pause_video(ctx):
+    controller = ctx.obj['controller']
+
+    expression = '''
+        document.querySelectorAll('video').forEach(video => video.pause());
+    '''
+
+    rv = controller.evaluate_expression(expression)
+
+@chromectrl_cli.command(help="Check if a video is full screen")
+@click.pass_context
+def is_video_fullscreen(ctx):
+    controller = ctx.obj['controller']
+    
+    expression = '''
+        document.fullscreenElement != null
+    '''
+
+    rv = controller.evaluate_expression(expression)
+
+    if 'result' in rv and 'result' in rv['result']:
+        print(str(rv['result']['result']['value']))
+    else:
+        print(str(False))
+
 @chromectrl_cli.command(help="Exit full screen")
 @click.pass_context
 def exit_fullscreen(ctx):
