@@ -78,8 +78,17 @@ class Controller:
         # (e.g., right to left)
         tab_info = list(reversed(ret_val['result']['targetInfos']))
 
+        # Filter out non-page tabs
+        tab_info = [tab for tab in tab_info if tab['type'] == 'page']
+
         return tab_info
     
+    def get_focused_tab(self):
+        # First get a list of all the tabs
+        cur_tab = self.evaluate_expression('window.location.href')
+
+        return cur_tab['result']['result']
+
     def send_keystroke(self, keystroke):
         try:
             ret_val, messages = self.chrome.Input.dispatchKeyEvent(type='rawKeyDown', text=keystroke)

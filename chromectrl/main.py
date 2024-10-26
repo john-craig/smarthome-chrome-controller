@@ -63,6 +63,19 @@ def get_tabs(ctx, jsonify):
     else:
         click.echo(cur_tabs)
 
+@chromectrl_cli.command(help="Get the currently focused tab")
+@click.option('-j', '--jsonify', is_flag=True, show_default=True, default=False, help="Display the result as JSON")
+@click.pass_context
+def get_focused_tab(ctx, jsonify):
+    controller = ctx.obj['controller']
+
+    cur_tab = controller.get_focused_tab()
+
+    if not jsonify:
+        click.echo(cur_tab['value'])
+    else:
+        click.echo(cur_tab)
+
 @chromectrl_cli.command(help="Close a tab with the specified URL")
 @click.option('-j', '--jsonify', is_flag=True, show_default=True, default=False, help="Display the result as JSON")
 @click.pass_context
